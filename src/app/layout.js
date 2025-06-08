@@ -1,5 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "../styles/globals.css";
+import PrivyProvider from "./auth/PrivyProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,13 +22,13 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <head>
         <link rel="icon" href="/favicon.ico" />
-
-        
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <PrivyProvider>
+          {children}
+        </PrivyProvider>
       </body>
     </html>
   );

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Shield, Zap, Users, TrendingUp, Award, Globe, Lock, Headphones } from 'lucide-react';
-
+import Link from 'next/link';
 const CryptosetuDashboard = () => {
   const advantages = [
     {
@@ -71,9 +71,11 @@ const CryptosetuDashboard = () => {
               <button className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-300 shadow-2xl">
                 Start Trading Now
               </button>
+              <Link href="/support" className="text-white">
               <button className="px-8 py-4 border border-gray-600 rounded-xl font-semibold hover:bg-gray-800 transform hover:scale-105 transition-all duration-300">
                 Learn More
               </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -149,9 +151,11 @@ const CryptosetuDashboard = () => {
               <button className="px-10 py-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-300 shadow-xl">
                 Create Account
               </button>
+              <Link href="/market" className="text-white">
               <button className="px-10 py-4 bg-gradient-to-r from-green-600 to-teal-600 rounded-xl font-semibold hover:from-green-700 hover:to-teal-700 transform hover:scale-105 transition-all duration-300 shadow-xl">
                 View Markets
               </button>
+              </Link>
             </div>
           </div>
         </div>
