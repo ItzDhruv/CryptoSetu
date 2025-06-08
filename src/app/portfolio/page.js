@@ -1,6 +1,6 @@
 'use client'
 import Header from "@/components/heder"
-export default function(){
+export default function portfolio(){
 return(
     <>
     <Header/>
