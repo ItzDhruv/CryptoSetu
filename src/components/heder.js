@@ -5,35 +5,345 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Logo from '../../public/exx.webp';
 import { useConnectWallet, usePrivy, useWallets } from '@privy-io/react-auth';
+import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
+import { parseEther, formatUnits } from 'viem';
+
+// Contract configuration
+const CONTRACT_CONFIG = {
+  address: '0x5A8B45581B20aA1360c85Ce14f4ddE57a047cC36', // Add your contract address here
+  abi: [
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "initialSupply",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "spender",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "Approval",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "Transfer",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "spender",
+          "type": "address"
+        }
+      ],
+      "name": "allowance",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "spender",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "approve",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "balanceOf",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "reciver",
+          "type": "address"
+        }
+      ],
+      "name": "buyToken",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "decimals",
+      "outputs": [
+        {
+          "internalType": "uint8",
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "name",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "symbol",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "totalSupply",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "transfer",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "transferFrom",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "withdralMyEth",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ]
+};
 
 export default function Header() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [showCSPopup, setShowCSPopup] = useState(false);
-  const [csBalance, setCsBalance] = useState(0);
   const [ethAmount, setEthAmount] = useState('');
   const [csAmount, setCsAmount] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [isTransactionPending, setIsTransactionPending] = useState(false);
 
   const { connectWallet } = useConnectWallet();
   const { logout, ready } = usePrivy();
   const { wallets } = useWallets();
+  const { address, isConnected } = useAccount();
 
-  // CS Token exchange rate (1 ETH = 1000 CS for example)
-  const CS_EXCHANGE_RATE = 1000;
+  // Get wallet address from Privy or wagmi
+  const walletAddress = address || wallets?.[0]?.address || '';
 
-  // Get wallet address
-  const walletAddress = wallets?.[0]?.address || '';
-  const isConnected = wallets && wallets.length > 0 && walletAddress;
-
-  // Simulate fetching CS balance (replace with actual contract call)
-  useEffect(() => {
-    if (isConnected) {
-      // This would be replaced with actual smart contract call
-      // For demo purposes, using localStorage to persist balance
-      const savedBalance = localStorage.getItem(`cs_balance_${walletAddress}`);
-      setCsBalance(parseFloat(savedBalance) || 0);
+  // Read CS token balance
+  const { data: csBalance, refetch: refetchBalance } = useReadContract({
+    ...CONTRACT_CONFIG,
+    functionName: 'balanceOf',
+    args: [walletAddress],
+    query: {
+      enabled: !!walletAddress && !!CONTRACT_CONFIG.address,
     }
-  }, [isConnected, walletAddress]);
+  });
+
+  // Write contract hook for buying tokens
+  const { writeContract, data: hash, error: writeError, isPending } = useWriteContract();
+
+  // Wait for transaction confirmation
+  const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
+    hash,
+  });
+
+  // Format CS balance for display
+  const formattedCSBalance = csBalance ? formatUnits(csBalance, 18) : '0';
+
+  // CS Token exchange rate (1 CS = 0.0001 ETH)
+  const CS_TO_ETH_RATE = 0.0001;
+
+  // Update balance after successful transaction
+  useEffect(() => {
+    if (isConfirmed) {
+      refetchBalance();
+      setShowCSPopup(false);
+      setEthAmount('');
+      setCsAmount('');
+      setIsTransactionPending(false);
+    }
+  }, [isConfirmed, refetchBalance]);
+
+  // Handle transaction errors
+  useEffect(() => {
+    if (writeError) {
+      console.error('Transaction error:', writeError);
+      alert(`Transaction failed: ${writeError.shortMessage || writeError.message}`);
+      setIsTransactionPending(false);
+    }
+  }, [writeError]);
 
   // Truncate wallet address
   const truncateAddress = (address) => {
@@ -83,44 +393,50 @@ export default function Header() {
   const handleEthChange = (e) => {
     const value = e.target.value;
     setEthAmount(value);
-    setCsAmount(value ? (parseFloat(value) * CS_EXCHANGE_RATE).toFixed(2) : '');
+    // Calculate CS tokens based on rate (1 CS = 0.0001 ETH)
+    setCsAmount(value ? (parseFloat(value) / CS_TO_ETH_RATE).toFixed(0) : '');
   };
 
   // Handle CS input change
   const handleCsChange = (e) => {
     const value = e.target.value;
     setCsAmount(value);
-    setEthAmount(value ? (parseFloat(value) / CS_EXCHANGE_RATE).toFixed(6) : '');
+    // Calculate ETH needed based on rate
+    setEthAmount(value ? (parseFloat(value) * CS_TO_ETH_RATE).toFixed(6) : '');
   };
 
-  // Buy CS tokens
+  // Buy CS tokens using smart contract
   const handleBuyCS = async () => {
     if (!ethAmount || parseFloat(ethAmount) <= 0) {
       alert('Please enter a valid ETH amount');
       return;
     }
 
-    setLoading(true);
+    if (!csAmount || parseFloat(csAmount) <= 0) {
+      alert('Invalid CS token amount');
+      return;
+    }
+
+    if (!CONTRACT_CONFIG.address) {
+      alert('Contract address not configured');
+      return;
+    }
+
     try {
-      // This would be replaced with actual smart contract interaction
-      // For demo purposes, simulating the purchase
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      setIsTransactionPending(true);
       
-      const newBalance = csBalance + parseFloat(csAmount);
-      setCsBalance(newBalance);
-      
-      // Save to localStorage (replace with actual contract state)
-      localStorage.setItem(`cs_balance_${walletAddress}`, newBalance.toString());
-      
-      alert(`Successfully purchased ${csAmount} CS tokens!`);
-      setShowCSPopup(false);
-      setEthAmount('');
-      setCsAmount('');
+      // Call the buyToken function
+      await writeContract({
+        ...CONTRACT_CONFIG,
+        functionName: 'buyToken',
+        args: [BigInt(csAmount), walletAddress], // amount in tokens, receiver address
+        value: parseEther(ethAmount) // ETH amount to send
+      });
+
     } catch (error) {
       console.error('Purchase failed:', error);
-      alert('Purchase failed. Please try again.');
-    } finally {
-      setLoading(false);
+      setIsTransactionPending(false);
+      alert(`Purchase failed: ${error.shortMessage || error.message}`);
     }
   };
 
@@ -167,7 +483,7 @@ export default function Header() {
                   <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8.070 7.681 8.433 7.418zM11 12.849v-1.698c.22.071.412.164.567.267.364.263.364.922 0 1.185A2.305 2.305 0 0111 12.849z"/>
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6.602 7.766 7.324 8.246 7.676 8.57 8.065 8.8 8.5 8.971V11.5c-.356.046-.68.166-.923.374-.568.384-.568 1.015 0 1.399.243.208.567.328.923.374V14a1 1 0 102 0v-.252c.607-.046 1.167-.214 1.676-.662.722-.48.722-2.012 0-2.492-.354-.32-.743-.548-1.176-.719V8.971c.356-.046.68-.166.923-.374.568-.384.568-1.015 0-1.399A3.536 3.536 0 0011 6.844V6z" clipRule="evenodd"/>
                 </svg>
-                <span>{csBalance.toFixed(2)} CS</span>
+                <span>{parseFloat(formattedCSBalance).toFixed(2)} CS</span>
               </button>
             )}
 
@@ -274,13 +590,13 @@ export default function Header() {
               {/* Current Balance */}
               <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-lg">
                 <p className="text-sm text-gray-600 mb-1">Current CS Balance</p>
-                <p className="text-2xl font-bold text-purple-600">{csBalance.toFixed(2)} CS</p>
+                <p className="text-2xl font-bold text-purple-600">{parseFloat(formattedCSBalance).toFixed(2)} CS</p>
               </div>
 
               {/* Exchange Rate */}
               <div className="bg-gray-50 p-3 rounded-lg">
                 <p className="text-sm text-gray-600 text-center">
-                  Exchange Rate: 1 ETH = {CS_EXCHANGE_RATE.toLocaleString()} CS
+                  Exchange Rate: 1 CS = 0.0001 ETH
                 </p>
               </div>
 
@@ -312,29 +628,41 @@ export default function Header() {
                     type="number"
                     value={csAmount}
                     onChange={handleCsChange}
-                    placeholder="0.00"
+                    placeholder="0"
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-lg font-bold text-green-600 placeholder-gray-400"
                   />
                   <span className="absolute right-3 top-3 text-green-600 font-bold text-lg">CS</span>
                 </div>
               </div>
 
+              {/* Transaction Status */}
+              {hash && (
+                <div className="bg-blue-50 p-3 rounded-lg">
+                  <p className="text-sm text-blue-600">
+                    {isConfirming ? 'Confirming transaction...' : 'Transaction submitted!'}
+                  </p>
+                  <p className="text-xs text-blue-500 break-all">Hash: {hash}</p>
+                </div>
+              )}
+
               {/* Buy Button */}
               <button
                 onClick={handleBuyCS}
-                disabled={loading || !ethAmount || parseFloat(ethAmount) <= 0}
+                disabled={isPending || isConfirming || isTransactionPending || !ethAmount || parseFloat(ethAmount) <= 0 || !CONTRACT_CONFIG.address}
                 className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 px-4 rounded-lg font-medium text-lg
                            hover:from-purple-700 hover:to-pink-700 transition-all duration-200
                            disabled:opacity-50 disabled:cursor-not-allowed
                            flex items-center justify-center space-x-2"
               >
-                {loading ? (
+                {(isPending || isConfirming || isTransactionPending) ? (
                   <>
                     <svg className="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    <span>Processing...</span>
+                    <span>
+                      {isPending ? 'Confirming...' : isConfirming ? 'Processing...' : 'Submitting...'}
+                    </span>
                   </>
                 ) : (
                   <>
@@ -350,6 +678,9 @@ export default function Header() {
               <div className="text-center text-sm text-gray-500">
                 <p>Network: Ethereum Sepolia Testnet</p>
                 <p>Make sure you have sufficient ETH for gas fees</p>
+                {!CONTRACT_CONFIG.address && (
+                  <p className="text-red-500 font-medium">⚠️ Contract address not configured</p>
+                )}
               </div>
             </div>
           </div>
