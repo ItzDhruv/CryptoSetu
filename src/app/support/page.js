@@ -23,80 +23,80 @@ export default function SupportPage() {
   const staticResponses = {
     "How do I deposit cryptocurrency?": `To deposit cryptocurrency to your CryptoSetu account:
 
-1. **Login** to your CryptoSetu account
-2. **Navigate** to 'Wallet' or 'Deposit' section
-3. **Select** the cryptocurrency you want to deposit
-4. **Copy** the deposit address or scan the QR code
-5. **Send** your crypto from your external wallet to this address
-6. **Wait** for network confirmations (usually 3-6 confirmations)
+1. Login to your CryptoSetu account
+2. Navigate to 'Wallet' or 'Deposit' section
+3. Select the cryptocurrency you want to deposit
+4. Copy the deposit address or scan the QR code
+5. Send your crypto from your external wallet to this address
+6. Wait for network confirmations (usually 3-6 confirmations)
 
-⚠️ **Important**: Always double-check the deposit address and network type. Wrong addresses can result in permanent loss of funds.
+⚠️ Important: Always double-check the deposit address and network type. Wrong addresses can result in permanent loss of funds.
 
-💡 **Tip**: Start with a small test transaction first if you're depositing a large amount.`,
+💡 Tip: Start with a small test transaction first if you're depositing a large amount.`,
 
     "What are your trading fees?": `CryptoSetu Trading Fees Structure:
 
-**Spot Trading:**
+Spot Trading:
 • Maker Fee: 0.10%
 • Taker Fee: 0.10%
 
-**Volume-Based Discounts:**
+Volume-Based Discounts:
 • 30-day volume > ₹10 Lakhs: 0.08%
 • 30-day volume > ₹50 Lakhs: 0.06%
 • 30-day volume > ₹1 Crore: 0.04%
 
-**Additional Fees:**
+Additional Fees:
 • Deposit: FREE for all cryptocurrencies
 • Withdrawal: Network fees apply (varies by crypto)
 • INR Deposits: FREE via UPI/IMPS
 • INR Withdrawals: ₹10 flat fee
 
-💎 **CryptoSetu Premium**: Get 50% fee discount with our premium membership!`,
+💎 CryptoSetu Premium: Get 50% fee discount with our premium membership!`,
 
     "How to verify my account?": `Account Verification Process:
 
-**Level 1 - Basic KYC:**
-1. **Personal Details**: Name, DOB, Address
-2. **Phone Verification**: OTP verification
-3. **Email Verification**: Confirmation link
-4. **PAN Card**: Upload clear photo of PAN
-5. **Aadhaar**: Upload front & back images
+Level 1 - Basic KYC:
+1. Personal Details: Name, DOB, Address
+2. Phone Verification: OTP verification
+3. Email Verification: Confirmation link
+4. PAN Card: Upload clear photo of PAN
+5. Aadhaar: Upload front & back images
 
-**Level 2 - Enhanced KYC:**
-1. **Bank Account**: Add and verify bank account
-2. **Video KYC**: Live verification call
-3. **Address Proof**: Utility bill/bank statement
-4. **Income Proof**: Salary slip/ITR (for higher limits)
+Level 2 - Enhanced KYC:
+1. Bank Account: Add and verify bank account
+2. Video KYC: Live verification call
+3. Address Proof: Utility bill/bank statement
+4. Income Proof: Salary slip/ITR (for higher limits)
 
-**Verification Time:**
+Verification Time:
 • Level 1: 2-24 hours
 • Level 2: 1-3 business days
 
-**Benefits:**
+Benefits:
 • Level 1: Basic trading (₹1 Lakh daily limit)
 • Level 2: Full access (₹10 Lakh+ daily limits)`,
 
     "Is my account secure?": `CryptoSetu Security Features:
 
-**Account Protection:**
-🔐 **2FA Authentication**: Google Authenticator/SMS
-🔒 **Cold Storage**: 95% funds stored offline
-🛡️ **SSL Encryption**: Bank-grade 256-bit encryption
-📱 **Device Management**: Monitor login devices
+Account Protection:
+🔐 2FA Authentication: Google Authenticator/SMS
+🔒 Cold Storage: 95% funds stored offline
+🛡️ SSL Encryption: Bank-grade 256-bit encryption
+📱 Device Management: Monitor login devices
 
-**Advanced Security:**
-• **Anti-Phishing Code**: Personalized email protection
-• **Withdrawal Whitelist**: Pre-approved addresses only
-• **IP Whitelisting**: Restrict access by location
-• **Auto-Logout**: Session timeout protection
+Advanced Security:
+• Anti-Phishing Code: Personalized email protection
+• Withdrawal Whitelist: Pre-approved addresses only
+• IP Whitelisting: Restrict access by location
+• Auto-Logout: Session timeout protection
 
-**Regulatory Compliance:**
-✅ **RBI Guidelines**: Fully compliant exchange
-✅ **KYC/AML**: Strict identity verification
-✅ **Regular Audits**: Third-party security audits
-✅ **Insurance**: FDIC equivalent crypto insurance
+Regulatory Compliance:
+✅ RBI Guidelines: Fully compliant exchange
+✅ KYC/AML: Strict identity verification
+✅ Regular Audits: Third-party security audits
+✅ Insurance: FDIC equivalent crypto insurance
 
-**Your Actions:**
+Your Actions:
 • Use strong, unique passwords
 • Enable 2FA immediately
 • Never share login credentials
@@ -104,61 +104,61 @@ export default function SupportPage() {
 
     "How to withdraw funds?": `Withdrawal Process:
 
-**Cryptocurrency Withdrawal:**
-1. **Go to Wallet** → Select cryptocurrency
-2. **Click Withdraw** → Enter recipient address
-3. **Enter Amount** → Review network fees
-4. **2FA Verification** → Enter Google Auth code
-5. **Email Confirmation** → Click confirmation link
-6. **Processing Time**: 10-30 minutes
+Cryptocurrency Withdrawal:
+1. Go to Wallet → Select cryptocurrency
+2. Click Withdraw → Enter recipient address
+3. Enter Amount → Review network fees
+4. 2FA Verification → Enter Google Auth code
+5. Email Confirmation → Click confirmation link
+6. Processing Time: 10-30 minutes
 
-**INR Withdrawal:**
-1. **Verify Bank Account** (one-time setup)
-2. **Go to INR Wallet** → Click Withdraw
-3. **Enter Amount** → Select bank account
-4. **2FA Verification** → Confirm transaction
-5. **Processing Time**: 2-24 hours (working days)
+INR Withdrawal:
+1. Verify Bank Account (one-time setup)
+2. Go to INR Wallet → Click Withdraw
+3. Enter Amount → Select bank account
+4. 2FA Verification → Confirm transaction
+5. Processing Time: 2-24 hours (working days)
 
-**Withdrawal Limits:**
-• **Basic KYC**: ₹1 Lakh/day
-• **Enhanced KYC**: ₹10 Lakh/day
-• **Premium**: ₹50 Lakh/day
+Withdrawal Limits:
+• Basic KYC: ₹1 Lakh/day
+• Enhanced KYC: ₹10 Lakh/day
+• Premium: ₹50 Lakh/day
 
-**Fees:**
+Fees:
 • Crypto: Network fees (₹50-500 depending on network)
 • INR: ₹10 flat fee
 
-⚠️ **Security Tip**: Always verify withdrawal addresses carefully!`,
+⚠️ Security Tip: Always verify withdrawal addresses carefully!`,
 
     "What cryptocurrencies do you support?": `CryptoSetu Supported Cryptocurrencies:
 
-**Major Cryptocurrencies:**
-• **Bitcoin (BTC)** - The original cryptocurrency
-• **Ethereum (ETH)** - Smart contract platform
-• **Binance Coin (BNB)** - Exchange token
-• **Cardano (ADA)** - Proof-of-stake blockchain
-• **Solana (SOL)** - High-speed blockchain
-• **Polkadot (DOT)** - Multi-chain protocol
+Major Cryptocurrencies:
+• Bitcoin (BTC) - The original cryptocurrency
+• Ethereum (ETH) - Smart contract platform
+• Binance Coin (BNB) - Exchange token
+• Cardano (ADA) - Proof-of-stake blockchain
+• Solana (SOL) - High-speed blockchain
+• Polkadot (DOT) - Multi-chain protocol
 
-**Popular Altcoins:**
-• **Polygon (MATIC)** - Ethereum scaling
-• **Chainlink (LINK)** - Oracle network
-• **Litecoin (LTC)** - Digital silver
-• **Ripple (XRP)** - Cross-border payments
-• **Dogecoin (DOGE)** - Meme cryptocurrency
-• **Shiba Inu (SHIB)** - Community token
+Popular Altcoins:
+• Polygon (MATIC) - Ethereum scaling
+• Chainlink (LINK) - Oracle network
+• Litecoin (LTC) - Digital silver
+• Ripple (XRP) - Cross-border payments
+• Dogecoin (DOGE) - Meme cryptocurrency
+• Shiba Inu (SHIB) - Community token
 
-**DeFi Tokens:**
-• **Uniswap (UNI)** - DEX protocol
-• **Aave (AAVE)** - Lending protocol
-• **Compound (COMP)** - Yield farming
+DeFi Tokens:
+• Uniswap (UNI) - DEX protocol
+• Aave (AAVE) - Lending protocol
+• Compound (COMP) - Yield farming
 
-**Indian Favorites:**
-• **WazirX (WRX)** - Indian exchange token
-• **Ather (ATH)** - Gaming token
+Indian Favorites:
+• WazirX (WRX) - Indian exchange token
+• Ather (ATH) - Gaming token
 
-**Total**: 100+ cryptocurrencies supported
-**New Listings**: Added regularly based on community demand
+Total: 100+ cryptocurrencies supported
+New Listings: Added regularly based on community demand
 
 💡 Don't see your favorite crypto? Contact us to request new listings!`
   };

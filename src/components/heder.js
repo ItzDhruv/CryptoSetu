@@ -8,286 +8,16 @@ import { useConnectWallet, usePrivy, useWallets } from '@privy-io/react-auth';
 import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
 import { parseEther, formatUnits } from 'viem';
 
-// Contract configuration
+import ABI from '../app/utils/cstoken.json'
+
 const CONTRACT_CONFIG = {
-  address: '0x5A8B45581B20aA1360c85Ce14f4ddE57a047cC36', // Add your contract address here
-  abi: [
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "initialSupply",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "nonpayable",
-      "type": "constructor"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "owner",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "spender",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "value",
-          "type": "uint256"
-        }
-      ],
-      "name": "Approval",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "from",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "to",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "value",
-          "type": "uint256"
-        }
-      ],
-      "name": "Transfer",
-      "type": "event"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "owner",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "spender",
-          "type": "address"
-        }
-      ],
-      "name": "allowance",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "spender",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "amount",
-          "type": "uint256"
-        }
-      ],
-      "name": "approve",
-      "outputs": [
-        {
-          "internalType": "bool",
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "account",
-          "type": "address"
-        }
-      ],
-      "name": "balanceOf",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "amount",
-          "type": "uint256"
-        },
-        {
-          "internalType": "address",
-          "name": "reciver",
-          "type": "address"
-        }
-      ],
-      "name": "buyToken",
-      "outputs": [],
-      "stateMutability": "payable",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "decimals",
-      "outputs": [
-        {
-          "internalType": "uint8",
-          "name": "",
-          "type": "uint8"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "name",
-      "outputs": [
-        {
-          "internalType": "string",
-          "name": "",
-          "type": "string"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "owner",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "symbol",
-      "outputs": [
-        {
-          "internalType": "string",
-          "name": "",
-          "type": "string"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "totalSupply",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "to",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "amount",
-          "type": "uint256"
-        }
-      ],
-      "name": "transfer",
-      "outputs": [
-        {
-          "internalType": "bool",
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "from",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "to",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "amount",
-          "type": "uint256"
-        }
-      ],
-      "name": "transferFrom",
-      "outputs": [
-        {
-          "internalType": "bool",
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "withdralMyEth",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    }
-  ]
+  address: process.env.NEXT_PUBLIC_CRYPTOSETU_TOKEN_ADDRESS,
+  abi: ABI,
 };
 
 export default function Header() {
   const [showDropdown, setShowDropdown] = useState(false);
+  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [showCSPopup, setShowCSPopup] = useState(false);
   const [ethAmount, setEthAmount] = useState('');
   const [csAmount, setCsAmount] = useState('');
@@ -298,10 +28,8 @@ export default function Header() {
   const { wallets } = useWallets();
   const { address, isConnected } = useAccount();
 
-  // Get wallet address from Privy or wagmi
   const walletAddress = address || wallets?.[0]?.address || '';
 
-  // Read CS token balance
   const { data: csBalance, refetch: refetchBalance } = useReadContract({
     ...CONTRACT_CONFIG,
     functionName: 'balanceOf',
@@ -311,21 +39,12 @@ export default function Header() {
     }
   });
 
-  // Write contract hook for buying tokens
   const { writeContract, data: hash, error: writeError, isPending } = useWriteContract();
+  const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({ hash });
 
-  // Wait for transaction confirmation
-  const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
-    hash,
-  });
-
-  // Format CS balance for display
   const formattedCSBalance = csBalance ? formatUnits(csBalance, 18) : '0';
-
-  // CS Token exchange rate (1 CS = 0.0001 ETH)
   const CS_TO_ETH_RATE = 0.0001;
 
-  // Update balance after successful transaction
   useEffect(() => {
     if (isConfirmed) {
       refetchBalance();
@@ -336,7 +55,6 @@ export default function Header() {
     }
   }, [isConfirmed, refetchBalance]);
 
-  // Handle transaction errors
   useEffect(() => {
     if (writeError) {
       console.error('Transaction error:', writeError);
@@ -345,13 +63,11 @@ export default function Header() {
     }
   }, [writeError]);
 
-  // Truncate wallet address
   const truncateAddress = (address) => {
     if (!address) return '';
     return `${address.slice(0, 6)}...${address.slice(-4)}`;
   };
 
-  // Copy address to clipboard
   const copyAddress = async () => {
     if (walletAddress) {
       try {
@@ -370,7 +86,6 @@ export default function Header() {
     setShowDropdown(false);
   };
 
-  // Disconnect wallet
   const handleDisconnect = async () => {
     try {
       setShowDropdown(false);
@@ -380,7 +95,6 @@ export default function Header() {
     }
   };
 
-  // Connect wallet
   const handleConnectWallet = async () => {
     try {
       await connectWallet();
@@ -389,23 +103,18 @@ export default function Header() {
     }
   };
 
-  // Handle ETH input change
   const handleEthChange = (e) => {
     const value = e.target.value;
     setEthAmount(value);
-    // Calculate CS tokens based on rate (1 CS = 0.0001 ETH)
     setCsAmount(value ? (parseFloat(value) / CS_TO_ETH_RATE).toFixed(0) : '');
   };
 
-  // Handle CS input change
   const handleCsChange = (e) => {
     const value = e.target.value;
     setCsAmount(value);
-    // Calculate ETH needed based on rate
     setEthAmount(value ? (parseFloat(value) * CS_TO_ETH_RATE).toFixed(6) : '');
   };
 
-  // Buy CS tokens using smart contract
   const handleBuyCS = async () => {
     if (!ethAmount || parseFloat(ethAmount) <= 0) {
       alert('Please enter a valid ETH amount');
@@ -425,12 +134,11 @@ export default function Header() {
     try {
       setIsTransactionPending(true);
       
-      // Call the buyToken function
       await writeContract({
         ...CONTRACT_CONFIG,
         functionName: 'buyToken',
-        args: [BigInt(csAmount), walletAddress], // amount in tokens, receiver address
-        value: parseEther(ethAmount) // ETH amount to send
+        args: [BigInt(csAmount), walletAddress],
+        value: parseEther(ethAmount)
       });
 
     } catch (error) {
@@ -441,81 +149,146 @@ export default function Header() {
   };
 
   const navItems = [
-    { href: "/", label: "Home" },
-    { href: "/swap", label: "Buy Crypto" },
+    { href: "/swap", label: "Exchange" },
     { href: "/market", label: "Market" },
-    { href: "/portfolio", label: "Your Portfolio" },
-    { href: "/support", label: "Support" }
+    { href: "/nft", label: "NFT" },
+    { href: "/stake", label: "Staking" },
   ];
 
   return (
     <>
-      <div className=''>
-        <ul className="flex items-center justify-between p-4 w-full">
-          <div className="flex space-x-20 items-center">
-            <li>
-              <Link href="/" className="flex flex-col items-center no-underline text-yellow-400">
-                <Image src={Logo} alt="Logo" width={40} height={40} />
-                <h3>CRYPTOSETU</h3>
-              </Link>
-            </li>
-            {navItems.map((item, index) => (
-              <li key={index}>
-                <Link href={item.href} className="no-underline text-white hover:text-amber-300">
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-          </div>
-          
-          <div className="flex items-center space-x-3">
-            {/* CS Token Balance */}
-            {isConnected && (
-              <button
-                onClick={() => setShowCSPopup(true)}
-                className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-1.5 rounded-md font-medium text-sm
-                           hover:from-purple-600 hover:to-pink-600 hover:shadow-lg hover:scale-105 
-                           transition-all duration-200 ease-in-out
-                           border-2 border-transparent hover:border-purple-300
-                           active:scale-95 flex items-center space-x-2"
-              >
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8.070 7.681 8.433 7.418zM11 12.849v-1.698c.22.071.412.164.567.267.364.263.364.922 0 1.185A2.305 2.305 0 0111 12.849z"/>
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6.602 7.766 7.324 8.246 7.676 8.57 8.065 8.8 8.5 8.971V11.5c-.356.046-.68.166-.923.374-.568.384-.568 1.015 0 1.399.243.208.567.328.923.374V14a1 1 0 102 0v-.252c.607-.046 1.167-.214 1.676-.662.722-.48.722-2.012 0-2.492-.354-.32-.743-.548-1.176-.719V8.971c.356-.046.68-.166.923-.374.568-.384.568-1.015 0-1.399A3.536 3.536 0 0011 6.844V6z" clipRule="evenodd"/>
-                </svg>
-                <span>{parseFloat(formattedCSBalance).toFixed(2)} CS</span>
-              </button>
-            )}
-
-            {/* Wallet Connection */}
-            <li className='relative'>
-              {!ready ? (
-                <div className="bg-gray-400 text-gray-600 px-4 py-1.5 rounded-md font-medium text-sm">
-                  Loading...
-                </div>
-              ) : !isConnected ? (
-                <button 
-                  onClick={handleConnectWallet}
-                  className="bg-yellow-400 text-blue-900 px-4 py-1.5 rounded-md font-medium text-sm
-                             hover:bg-yellow-300 hover:shadow-lg hover:scale-105 
-                             transition-all duration-200 ease-in-out
-                             border-2 border-transparent hover:border-yellow-200
-                             active:scale-95"
-                >
-                  Connect
-                </button>
-              ) : (
+      {/* Main Header */}
+      <header className="sticky top-0 z-40 w-full backdrop-blur-md bg-slate-900/95 border-b border-slate-800/50 shadow-lg">
+        <div className="w-full px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            
+            {/* Logo Section - Top Left */}
+            <div className="flex items-center">
+              <Link href="/" className="flex items-center space-x-3 group">
                 <div className="relative">
+                  <Image 
+                    src={Logo} 
+                    alt="CryptoSetu Logo" 
+                    width={36} 
+                    height={36} 
+                    className="rounded-lg group-hover:scale-110 transition-transform duration-200"
+                  />
+                  <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-yellow-400/20 to-amber-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
+                </div>
+                <div className="hidden sm:block">
+                  <h1 className="text-xl font-bold bg-gradient-to-r from-yellow-400 to-amber-300 bg-clip-text text-transparent">
+                    CRYPTOSETU
+                  </h1>
+                </div>
+              </Link>
+            </div>
+
+            {/* Navigation - Center */}
+            <nav className="hidden lg:flex items-center space-x-1">
+              {navItems.map((item, index) => (
+                <Link
+                  key={index}
+                  href={item.href}
+                  className="relative px-4 py-2 text-sm font-medium text-slate-300 hover:text-white 
+                             rounded-lg transition-all duration-200 hover:bg-slate-800/50 
+                             group flex items-center space-x-2"
+                >
+                  <svg className="w-4 h-4 opacity-70 group-hover:opacity-100" fill="currentColor" viewBox="0 0 24 24">
+                    <path d={item.icon} />
+                  </svg>
+                  <span>{item.label}</span>
+                  <div className="absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-yellow-400/0 via-yellow-400/70 to-yellow-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
+                </Link>
+              ))}
+            </nav>
+
+            {/* Wallet Section - Top Right */}
+            <div className="flex items-center space-x-3">
+              
+              {/* CS Token Balance */}
+              {isConnected && (
+                <button
+                  onClick={() => setShowCSPopup(true)}
+                  className="hidden sm:flex items-center space-x-2 px-3 py-1.5 bg-gradient-to-r from-purple-600 to-pink-600 
+                             hover:from-purple-700 hover:to-pink-700 text-white rounded-lg text-sm font-medium
+                             transition-all duration-200 hover:shadow-lg hover:scale-105 active:scale-95"
+                >
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6.602 7.766 7.324 8.246 7.676 8.57 8.065 8.8 8.5 8.971V11.5c-.356.046-.68.166-.923.374-.568.384-.568 1.015 0 1.399.243.208.567.328.923.374V14a1 1 0 102 0v-.252c.607-.046 1.167-.214 1.676-.662.722-.48.722-2.012 0-2.492-.354-.32-.743-.548-1.176-.719V8.971c.356-.046.68-.166.923-.374.568-.384.568-1.015 0-1.399A3.536 3.536 0 0011 6.844V6z" clipRule="evenodd"/>
+                  </svg>
+                  <span>{parseFloat(formattedCSBalance).toFixed(2)} CS</span>
+                </button>
+              )}
+
+              {/* Profile Dropdown */}
+              {isConnected && (
+                <div className="relative">
+                  <button
+                    onClick={() => setShowProfileDropdown(!showProfileDropdown)}
+                    className="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white 
+                               rounded-lg transition-all duration-200 hover:shadow-lg hover:scale-105 active:scale-95"
+                  >
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd"/>
+                    </svg>
+                  </button>
+
+                  {showProfileDropdown && (
+                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-200 z-50 overflow-hidden">
+                      <div className="py-1">
+                        <Link 
+                          href="/profile"
+                          onClick={() => setShowProfileDropdown(false)}
+                          className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-150"
+                        >
+                          <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                          </svg>
+                          Profile
+                        </Link>
+                        <Link 
+                          href="/support"
+                          onClick={() => setShowProfileDropdown(false)}
+                          className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-green-50 hover:text-green-600 transition-colors duration-150"
+                        >
+                          <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M12 2.196L12 21.804M21.804 12L2.196 12" />
+                          </svg>
+                          Support
+                        </Link>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Wallet Connect Button */}
+              <div className="relative">
+                {!ready ? (
+                  <div className="px-4 py-2 bg-slate-700 text-slate-400 rounded-lg text-sm font-medium">
+                    Loading...
+                  </div>
+                ) : !isConnected ? (
+                  <button 
+                    onClick={handleConnectWallet}
+                    className="px-4 py-2 bg-gradient-to-r from-yellow-400 to-amber-400 hover:from-yellow-500 hover:to-amber-500 
+                               text-slate-900 font-semibold rounded-lg text-sm transition-all duration-200 
+                               hover:shadow-lg hover:scale-105 active:scale-95 flex items-center space-x-2"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    <span>Connect Wallet</span>
+                  </button>
+                ) : (
                   <button 
                     onClick={() => setShowDropdown(!showDropdown)}
-                    className="bg-yellow-400 text-blue-900 px-4 py-1.5 rounded-md font-medium text-sm
-                               hover:bg-yellow-300 hover:shadow-lg hover:scale-105 
-                               transition-all duration-200 ease-in-out
-                               border-2 border-transparent hover:border-yellow-200
-                               active:scale-95 flex items-center space-x-2"
+                    className="flex items-center space-x-2 px-3 py-2 bg-gradient-to-r from-green-600 to-emerald-600 
+                               hover:from-green-700 hover:to-emerald-700 text-white font-medium rounded-lg text-sm
+                               transition-all duration-200 hover:shadow-lg hover:scale-105 active:scale-95"
                   >
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span>{truncateAddress(walletAddress)}</span>
+                    <div className="w-2 h-2 bg-green-300 rounded-full animate-pulse"></div>
+                    <span className="hidden sm:inline">{truncateAddress(walletAddress)}</span>
                     <svg 
                       className={`w-4 h-4 transition-transform duration-200 ${showDropdown ? 'rotate-180' : ''}`}
                       fill="none" 
@@ -525,62 +298,93 @@ export default function Header() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                   </button>
+                )}
 
-                  {showDropdown && (
-                    <div className="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-xl border border-gray-200 z-50">
-                      <div className="py-1">
-                        <button
-                          onClick={copyAddress}
-                          className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-150"
-                        >
-                          <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                          </svg>
-                          Copy Address
-                        </button>
-                        <button
-                          onClick={handleDisconnect}
-                          className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors duration-150"
-                        >
-                          <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                          </svg>
-                          Disconnect
-                        </button>
-                      </div>
+                {/* Wallet Dropdown */}
+                {showDropdown && isConnected && (
+                  <div className="absolute right-0 mt-2 w-44 bg-white rounded-xl shadow-xl border border-gray-200 z-50 overflow-hidden">
+                    <div className="py-1">
+                      <button
+                        onClick={copyAddress}
+                        className="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-150"
+                      >
+                        <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                        </svg>
+                        Copy Address
+                      </button>
+                      <div className="border-t border-gray-100"></div>
+                      <button
+                        onClick={handleDisconnect}
+                        className="flex items-center w-full px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors duration-150"
+                      >
+                        <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+                        Disconnect
+                      </button>
                     </div>
-                  )}
-                </div>
-              )}
-            </li>
-          </div>
-        </ul>
+                  </div>
+                )}
+              </div>
 
-        {showDropdown && (
-          <div 
-            className="fixed inset-0 z-40" 
-            onClick={() => setShowDropdown(false)}
-          />
+              {/* Mobile Menu Button */}
+              <button className="lg:hidden p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors duration-200">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile CS Token Balance */}
+        {isConnected && (
+          <div className="sm:hidden px-4 pb-3">
+            <button
+              onClick={() => setShowCSPopup(true)}
+              className="w-full flex items-center justify-center space-x-2 px-3 py-2 bg-gradient-to-r from-purple-600 to-pink-600 
+                         hover:from-purple-700 hover:to-pink-700 text-white rounded-lg text-sm font-medium
+                         transition-all duration-200"
+            >
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6.602 7.766 7.324 8.246 7.676 8.57 8.065 8.8 8.5 8.971V11.5c-.356.046-.68.166-.923.374-.568.384-.568 1.015 0 1.399.243.208.567.328.923.374V14a1 1 0 102 0v-.252c.607-.046 1.167-.214 1.676-.662.722-.48.722-2.012 0-2.492-.354-.32-.743-.548-1.176-.719V8.971c.356-.046.68-.166.923-.374.568-.384.568-1.015 0-1.399A3.536 3.536 0 0011 6.844V6z" clipRule="evenodd"/>
+              </svg>
+              <span>{parseFloat(formattedCSBalance).toFixed(2)} CS Tokens</span>
+            </button>
+          </div>
         )}
-      </div>
+      </header>
+
+      {/* Overlay for closing dropdowns */}
+      {(showDropdown || showProfileDropdown) && (
+        <div 
+          className="fixed inset-0 z-30" 
+          onClick={() => {
+            setShowDropdown(false);
+            setShowProfileDropdown(false);
+          }}
+        />
+      )}
 
       {/* CS Token Purchase Popup */}
       {showCSPopup && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-6 w-96 max-w-md mx-4 shadow-2xl">
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl animate-in fade-in duration-200">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-gray-800 flex items-center">
-                <svg className="w-6 h-6 mr-2 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8.070 7.681 8.433 7.418zM11 12.849v-1.698c.22.071.412.164.567.267.364.263.364.922 0 1.185A2.305 2.305 0 0111 12.849z"/>
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6.602 7.766 7.324 8.246 7.676 8.57 8.065 8.8 8.5 8.971V11.5c-.356.046-.68.166-.923.374-.568.384-.568 1.015 0 1.399.243.208.567.328.923.374V14a1 1 0 102 0v-.252c.607-.046 1.167-.214 1.676-.662.722-.48.722-2.012 0-2.492-.354-.32-.743-.548-1.176-.719V8.971c.356-.046.68-.166.923-.374.568-.384.568-1.015 0-1.399A3.536 3.536 0 0011 6.844V6z" clipRule="evenodd"/>
-                </svg>
+                <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg flex items-center justify-center mr-3">
+                  <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6.602 7.766 7.324 8.246 7.676 8.57 8.065 8.8 8.5 8.971V11.5c-.356.046-.68.166-.923.374-.568.384-.568 1.015 0 1.399.243.208.567.328.923.374V14a1 1 0 102 0v-.252c.607-.046 1.167-.214 1.676-.662.722-.48.722-2.012 0-2.492-.354-.32-.743-.548-1.176-.719V8.971c.356-.046.68-.166.923-.374.568-.384.568-1.015 0-1.399A3.536 3.536 0 0011 6.844V6z" clipRule="evenodd"/>
+                  </svg>
+                </div>
                 Buy CS Tokens
               </h2>
               <button
                 onClick={() => setShowCSPopup(false)}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
+                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-200"
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
@@ -588,21 +392,23 @@ export default function Header() {
 
             <div className="space-y-4">
               {/* Current Balance */}
-              <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-lg">
-                <p className="text-sm text-gray-600 mb-1">Current CS Balance</p>
-                <p className="text-2xl font-bold text-purple-600">{parseFloat(formattedCSBalance).toFixed(2)} CS</p>
+              <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-xl border border-purple-100">
+                <p className="text-sm text-gray-600 mb-1">Current Balance</p>
+                <p className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                  {parseFloat(formattedCSBalance).toFixed(2)} CS
+                </p>
               </div>
 
               {/* Exchange Rate */}
-              <div className="bg-gray-50 p-3 rounded-lg">
-                <p className="text-sm text-gray-600 text-center">
-                  Exchange Rate: 1 CS = 0.0001 ETH
+              <div className="bg-gray-50 p-3 rounded-xl text-center">
+                <p className="text-sm text-gray-600">
+                  <span className="font-semibold">Exchange Rate:</span> 1 CS = 0.0001 ETH
                 </p>
               </div>
 
               {/* ETH Input */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+              <div className="space-y-2">
+                <label className="block text-sm font-semibold text-gray-700">
                   Pay with ETH (Sepolia)
                 </label>
                 <div className="relative">
@@ -610,17 +416,17 @@ export default function Header() {
                     type="number"
                     value={ethAmount}
                     onChange={handleEthChange}
-                    placeholder="0.00"
+                    placeholder="0.000000"
                     step="0.000001"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-lg font-bold text-green-600 placeholder-gray-400"
+                    className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent text-lg font-bold text-green-600 placeholder-gray-400"
                   />
-                  <span className="absolute right-3 top-3 text-green-600 font-bold text-lg">ETH</span>
+                  <span className="absolute right-4 top-3 text-gray-500 font-medium">ETH</span>
                 </div>
               </div>
 
               {/* CS Output */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+              <div className="space-y-2">
+                <label className="block text-sm font-semibold text-gray-700">
                   Receive CS Tokens
                 </label>
                 <div className="relative">
@@ -629,19 +435,21 @@ export default function Header() {
                     value={csAmount}
                     onChange={handleCsChange}
                     placeholder="0"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-lg font-bold text-green-600 placeholder-gray-400"
+                    className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent text-lg font-bold text-green-600 placeholder-gray-400"
                   />
-                  <span className="absolute right-3 top-3 text-green-600 font-bold text-lg">CS</span>
+                  <span className="absolute right-4 top-3 text-gray-500 font-medium">CS</span>
                 </div>
               </div>
 
               {/* Transaction Status */}
               {hash && (
-                <div className="bg-blue-50 p-3 rounded-lg">
-                  <p className="text-sm text-blue-600">
-                    {isConfirming ? 'Confirming transaction...' : 'Transaction submitted!'}
+                <div className="bg-blue-50 border border-blue-200 p-3 rounded-xl">
+                  <p className="text-sm font-medium text-blue-700">
+                    {isConfirming ? '⏳ Confirming transaction...' : '✅ Transaction submitted!'}
                   </p>
-                  <p className="text-xs text-blue-500 break-all">Hash: {hash}</p>
+                  <p className="text-xs text-blue-600 break-all mt-1">
+                    Hash: {hash.slice(0, 20)}...
+                  </p>
                 </div>
               )}
 
@@ -649,10 +457,10 @@ export default function Header() {
               <button
                 onClick={handleBuyCS}
                 disabled={isPending || isConfirming || isTransactionPending || !ethAmount || parseFloat(ethAmount) <= 0 || !CONTRACT_CONFIG.address}
-                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 px-4 rounded-lg font-medium text-lg
-                           hover:from-purple-700 hover:to-pink-700 transition-all duration-200
-                           disabled:opacity-50 disabled:cursor-not-allowed
-                           flex items-center justify-center space-x-2"
+                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 
+                           text-white py-3 px-4 rounded-xl font-semibold text-lg transition-all duration-200
+                           disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:from-purple-600 disabled:hover:to-pink-600
+                           flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl"
               >
                 {(isPending || isConfirming || isTransactionPending) ? (
                   <>
@@ -675,9 +483,9 @@ export default function Header() {
               </button>
 
               {/* Network Info */}
-              <div className="text-center text-sm text-gray-500">
-                <p>Network: Ethereum Sepolia Testnet</p>
-                <p>Make sure you have sufficient ETH for gas fees</p>
+              <div className="text-center text-xs text-gray-500 space-y-1">
+                <p>🌐 Network: Ethereum Sepolia Testnet</p>
+                <p>⚡ Ensure sufficient ETH for gas fees</p>
                 {!CONTRACT_CONFIG.address && (
                   <p className="text-red-500 font-medium">⚠️ Contract address not configured</p>
                 )}
