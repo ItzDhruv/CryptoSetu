@@ -148,9 +148,11 @@ const CryptosetuDashboard = () => {
               Sign up today and experience the difference.
             </p>
             <div className="flex justify-center gap-4 flex-wrap">
+              <Link href="/nft" className="text-white">
               <button className="px-10 py-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-300 shadow-xl">
-                Create Account
+                Explore Nfts
               </button>
+              </Link>
               <Link href="/market" className="text-white">
               <button className="px-10 py-4 bg-gradient-to-r from-green-600 to-teal-600 rounded-xl font-semibold hover:from-green-700 hover:to-teal-700 transform hover:scale-105 transition-all duration-300 shadow-xl">
                 View Markets
