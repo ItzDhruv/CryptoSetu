@@ -1,12 +1,14 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import Image from 'next/image';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { TrendingUp, TrendingDown, DollarSign, BarChart3 } from 'lucide-react';
 
 // Mock Header component
 import Header from '../../components/heder'
 const coinGekoApi = process.env.NEXT_PUBLIC_COIN_GECKO_API ;
+
 export default function MarketPage() {
   const [coins, setCoins] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -16,18 +18,15 @@ export default function MarketPage() {
   const [sortBy, setSortBy] = useState('market_cap_rank');
   const [sortOrder, setSortOrder] = useState('asc');
 
-  // Top cryptocurrencies to display
-  const topCoins = [
+  // Top cryptocurrencies to display - wrapped in useMemo to prevent recreation
+  const topCoins = useMemo(() => [
     'bitcoin', 'ethereum', 'binancecoin', 'solana', 'cardano', 
     'avalanche-2', 'polygon', 'chainlink', 'uniswap', 'litecoin',
     'tether', 'usd-coin', 'ripple', 'dogecoin', 'polkadot'
-  ];
+  ], []);
 
-  useEffect(() => {
-    fetchMarketData();
-  }, []);
-
-  const fetchMarketData = async () => {
+  // Use useCallback to memoize the fetchMarketData function
+  const fetchMarketData = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch(
@@ -47,7 +46,11 @@ export default function MarketPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [topCoins]);
+
+  useEffect(() => {
+    fetchMarketData();
+  }, [fetchMarketData]);
 
   const fetchCoinChart = async (coinGekoApi) => {
     try {
@@ -213,7 +216,13 @@ export default function MarketPage() {
               <div className="bg-gray-800 rounded-xl p-6 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
                 <div className="flex justify-between items-center mb-6">
                   <div className="flex items-center">
-                    <img src={selectedCoin.image} alt={selectedCoin.name} className="w-8 h-8 mr-3" />
+                    <Image 
+                      src={selectedCoin.image} 
+                      alt={selectedCoin.name} 
+                      width={32} 
+                      height={32} 
+                      className="mr-3"
+                    />
                     <h2 className="text-2xl font-bold">{selectedCoin.name} Price Chart</h2>
                   </div>
                   <button 
@@ -332,7 +341,13 @@ export default function MarketPage() {
                       <td className="p-4 font-semibold">{coin.market_cap_rank}</td>
                       <td className="p-4">
                         <div className="flex items-center">
-                          <img src={coin.image} alt={coin.name} className="w-8 h-8 mr-3" />
+                          <Image 
+                            src={coin.image} 
+                            alt={coin.name} 
+                            width={32} 
+                            height={32} 
+                            className="mr-3"
+                          />
                           <div>
                             <div className="font-semibold">{coin.name}</div>
                             <div className="text-gray-400 text-sm uppercase">{coin.symbol}</div>

@@ -180,7 +180,7 @@ export default function NFTMarketplace() {
                 CryptoSetu NFT Marketplace
               </h1>
               <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
-                Discover, collect, and trade extraordinary NFTs from the world's most talented creators
+                Discover, collect, and trade extraordinary NFTs from the world&apos;s most talented creators
               </p>
               
               {/* Stats */}

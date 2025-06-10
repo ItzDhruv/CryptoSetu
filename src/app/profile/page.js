@@ -246,7 +246,7 @@ export default function NFTMarketplace() {
                 CryptoSetu NFT Marketplace
               </h1>
               <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
-                Discover, collect, and trade extraordinary NFTs from the world's most talented creators
+                Discover, collect, and trade extraordinary NFTs 
               </p>
               
               {/* CS Token Discount Banner */}
@@ -573,7 +573,7 @@ export default function NFTMarketplace() {
                 onClick={() => setShowPurchaseModal(false)}
                 className="p-2 text-gray-400 hover:text-white"
               >
-                <X className="w-5 h-5" />
+              
               </button>
             </div>
             
